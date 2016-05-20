@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <changeSet id="initializeTables" author="lvdpal" context="structure">
+        <createTable tableName="EMPLOYEE">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="firstname" type="varchar(255)"/>
+            <column name="lastname" type="varchar(255)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="department" type="varchar(255)"/>
+            <column name="receive_notifications" type="bit" defaultValueBoolean="false" />
+
+        </createTable>
+        <addNotNullConstraint
+            columnDataType="bit"
+            columnName="receive_notifications"
+            tableName="EMPLOYEE"/>
+        <createIndex indexName="idx_employee_email" tableName="EMPLOYEE" unique="true">
+            <column name="email" type="varchar(100)"/>
+        </createIndex>
+        <createTable tableName="AUTHORITY">
+            <column name="name" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="EMPLOYEE_AUTHORITY">
+            <column name="employee_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authority_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="employee_id, authority_name" tableName="EMPLOYEE_AUTHORITY"/>
+        <addForeignKeyConstraint baseColumnNames="authority_name"
+                                 baseTableName="EMPLOYEE_AUTHORITY"
+                                 constraintName="fk_authority_name"
+                                 referencedColumnNames="name"
+                                 referencedTableName="AUTHORITY"/>
+        <addForeignKeyConstraint baseColumnNames="employee_id"
+                                 baseTableName="EMPLOYEE_AUTHORITY"
+                                 constraintName="fk_employee_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="EMPLOYEE"/>
+    </changeSet>
+    <changeSet id="addParkingSpotTables" author="lvdpal">
+        <createTable tableName="PARKINGSPOT">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="number" type="varchar(5)"/>
+        </createTable>
+        <createTable tableName="RESERVATION">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="employee_id" type="bigint"/>
+            <column name="parkingspot_id" type="bigint"/>
+            <column name="date" type="date"/>
+            <column name="startTime" type="time"/>
+            <column name="endTime" type="time"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="employee_id"
+                                 baseTableName="RESERVATION"
+                                 constraintName="fk_reservation_employee"
+                                 referencedColumnNames="id"
+                                 referencedTableName="EMPLOYEE"/>
+        <addForeignKeyConstraint baseColumnNames="parkingspot_id"
+                                 baseTableName="RESERVATION"
+                                 constraintName="fk_reservation_parkingspot"
+                                 referencedColumnNames="id"
+                                 referencedTableName="PARKINGSPOT"/>
+    </changeSet>
+    <changeSet id="data" author="lvdpal">
+        <loadData encoding="UTF-8"
+                  file="seed/parkingspots.csv"
+                  separator=";"
+                  tableName="PARKINGSPOT"
+                  relativeToChangelogFile="true">
+        </loadData>
+        <loadData encoding="UTF-8"
+                  file="seed/employees.csv"
+                  separator=";"
+                  tableName="EMPLOYEE"
+                  relativeToChangelogFile="true">
+        </loadData>
+        <loadData encoding="UTF-8"
+                  file="seed/authorities.csv"
+                  separator=";"
+                  tableName="AUTHORITY"
+                  relativeToChangelogFile="true">
+        </loadData>        <loadData encoding="UTF-8"
+                  file="seed/employee_authorities.csv"
+                  separator=";"
+                  tableName="EMPLOYEE_AUTHORITY"
+                  relativeToChangelogFile="true">
+        </loadData>
+        <loadData encoding="UTF-8"
+                  file="seed/reservations.csv"
+                  separator=";"
+                  tableName="RESERVATION"
+                  relativeToChangelogFile="true">
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

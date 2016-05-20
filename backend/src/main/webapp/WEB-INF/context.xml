@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<Context reloadable="false" antiResourceLocking="false">
+    <Loader delegate="true" />
+    <ResourceLink global="jdbc/services" name="jdbc/services" type="javax.sql.DataSource" />
+</Context>

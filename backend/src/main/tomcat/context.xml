@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <Resource name="jdbc/services" auth="Container" type="javax.sql.DataSource" maxActive="30" maxIdle="30"
+              maxWait="10000" username="root" password="adminadmin" driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost/parking"/>
+</Context>
