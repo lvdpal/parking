@@ -7,18 +7,18 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import nl.jduches.parking.services.CheappService;
+import nl.jduches.parking.services.ParkingService;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 
 @Module(includes = {CoreModule.class})
-public class CheappServiceModule {
+public class ParkingServiceModule {
 
     private Retrofit getAdapter(OkHttpClient client, Gson gson) {
         return new Retrofit.Builder()
                 //TODO change url
-                .baseUrl("http://url.com")
+                .baseUrl("http://10.0.3.2:8080")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)
@@ -27,7 +27,7 @@ public class CheappServiceModule {
 
     @Provides
     @Singleton
-    CheappService provideService(OkHttpClient client, Gson gson) {
-        return getAdapter(client, gson).create(CheappService.class);
+    ParkingService provideService(OkHttpClient client, Gson gson) {
+        return getAdapter(client, gson).create(ParkingService.class);
     }
 }

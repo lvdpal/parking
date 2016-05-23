@@ -36,7 +36,7 @@ public class CoreModule {
     @Provides
     @Singleton
     SharedPreferences provideSharedPreferences() {
-        return application.getSharedPreferences("Cheapp", Context.MODE_PRIVATE);
+        return application.getSharedPreferences("Parkingapp", Context.MODE_PRIVATE);
     }
 
     @Provides

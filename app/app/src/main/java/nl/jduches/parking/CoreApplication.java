@@ -13,16 +13,18 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import nl.jduches.parking.dagger.CheappServiceModule;
+import nl.jduches.parking.dagger.ParkingServiceModule;
 import nl.jduches.parking.dagger.CoreModule;
+import nl.jduches.parking.fragments.ParkingListFragment;
 
 public class CoreApplication extends Application {
 
     @Singleton
-    @Component(modules = {CoreModule.class, CheappServiceModule.class})
+    @Component(modules = {CoreModule.class, ParkingServiceModule.class})
     public interface ApplicationComponent {
         void inject(CoreApplication application);
         void inject(MainActivity activity);
+        void inject(ParkingListFragment parkingListFragment);
     }
 
     private ApplicationComponent component;
@@ -35,7 +37,7 @@ public class CoreApplication extends Application {
         super.onCreate();
         component = DaggerCoreApplication_ApplicationComponent.builder()
                 .coreModule(new CoreModule(this))
-                .cheappServiceModule(new CheappServiceModule())
+                .parkingServiceModule(new ParkingServiceModule())
                 .build();
 
         component.inject(this);
